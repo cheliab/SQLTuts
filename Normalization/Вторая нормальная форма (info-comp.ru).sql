@@ -119,20 +119,27 @@ GO
 -- Проекты, Участники и их связь
 
 DROP TABLE Projects
+GO
+
+DROP TABLE Particiants
+GO
+
+DROP TABLE ParticipationInProjects
+GO
 
 CREATE TABLE Projects(
-	ID int IDENTITY(1,1) NOT NULL
-	,[Name] varchar(max)
-	,TermMonth int
-	,CONSTRAINT PR_ID PRIMARY KEY CLUSTERED (ID)
+	ID int NOT NULL   -- Идентификатор проекта
+	,[Name] varchar(max)            -- Название проекта
+	,TermMonth int                  -- Срок проекта (мес.)
+	,CONSTRAINT PR_Projects_ID PRIMARY KEY CLUSTERED (ID)
 )
 GO
 
 CREATE TABLE Particiants(
-	ID int IDENTITY(1,1) NOT NULL
+	ID int NOT NULL
 	,FullName varchar(max)
 	,Position varchar(max)
-	,CONSTRAINT PR_ID PRIMARY KEY CLUSTERED (ID)
+	,CONSTRAINT PR_Particiants_ID PRIMARY KEY CLUSTERED (ID)
 )
 GO
 
@@ -142,36 +149,24 @@ CREATE TABLE ParticipationInProjects(
 )
 GO
 
---INSERT Projects VALUES
---()
---GO
+INSERT Projects VALUES
+(1, 'Внедрение приложения', 8)
+,(2, 'Открытие нового магазина', 12)
+GO
 
---INSERT Particiants VALUES
---()
---GO
+INSERT Particiants VALUES
+(1, 'Иванов И.И.', 'Программист')
+,(2, 'Сергеев С.С.', 'Бухгалтер')
+,(3, 'John Smith', 'Менеджер')
+GO
 
---INSERT ParticipationInProjects VALUES
---()
---GO
-
---Идентификатор проекта	Название проекта	Срок проекта (мес.)
---1	Внедрение приложения	8
---2	Открытие нового магазина	12
---Участники.
-
---Идентификатор участника	Участник	Должность
---1	Иванов И.И.	Программист
---2	Сергеев С.С.	Бухгалтер
---3	John Smith	Менеджер
---Связь проектов и участников этих проектов.
-
---Идентификатор проекта	Идентификатор участника
---1	1
---1	2
---1	3
---2	2
---2	3
-
+INSERT ParticipationInProjects VALUES
+(1,1)
+,(1,2)
+,(1,3)
+,(2,2)
+,(2,3)
+GO
 
 SELECT * FROM Projects
 GO
