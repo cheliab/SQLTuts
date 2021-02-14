@@ -9,4 +9,4 @@
 --FOR ATTACH
 
 --DROP DATABASE contactsdb
-DROP DATABASE userdb
+--DROP DATABASE userdb
