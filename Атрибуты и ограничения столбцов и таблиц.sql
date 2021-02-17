@@ -114,17 +114,38 @@ create table Customers_Check
 	check((Age > 0 and Age < 100) and (Email != '') and (Phone != ''))
  )
 
- -----------------------------------------------------------------
+-----------------------------------------------------------------
 -- CONSTRAINT - ограничение значений
+
+-- Рекомендуемы префиксы --
+--"PK_" - для PRIMARY KEY
+--"FK_" - для FOREIGN KEY
+--"CK_" - для CHECK
+--"UQ_" - для UNIQUE
+--"DF_" - для DEFAULT
 
  create table Customers_Constraint_Column
  (
 	Id int primary key identity,
 	Age int 
-		constraint DF_Customer_Age default 18
-		constraint CK_Customer_Age check(Age > 0 and Age < 100),
+		constraint DF_Customer_Age default 18 -- задаем имя на уровне колонки
+		constraint CK_Customer_Age check(Age > 0 and Age < 100), -- задаем имя на уровне колонки
 	FirstName nvarchar(20) not null,
 	LastName nvarchar(20) not null,
 	Email varchar(20) unique,
 	Phone varchar(20) unique
+ )
+
+ create table Customers_Constraint_Table
+ (
+	Id int identity,
+	Age int constraint DF_Csutomer_Age default 18,
+	FirstName nvarchar(20) not null,
+	LastName nvarchar(20) not null,
+	Email varchar(30),
+	Phone varchar(20),
+	constraint PR_Customer_Id primary key(Id),
+	constraint CK_Customer_Age check(Age > 0 and Age < 100),
+	constraint UQ_Customer_Email unique(Email),
+	constraint UQ_Customer_Phone unique(Phone)
  )
