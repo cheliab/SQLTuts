@@ -1,9 +1,10 @@
 -- Атрибуты и ограничения столбцов и таблиц
 
-create database newDB;
-GO;
+--create database newDB;
+--GO
 
-use newDB;
+--use newDB;
+--GO
 
 -----------------------------------------------------------------
 -- PRIMARY KEY - первичный ключ
@@ -144,7 +145,7 @@ create table Customers_Check
 	LastName nvarchar(20) not null,
 	Email varchar(30),
 	Phone varchar(20),
-	constraint PR_Customer_Id primary key(Id),
+	constraint PR_Customer_Id primary key(Id), -- задаем имя на уровне таблицы
 	constraint CK_Customer_Age check(Age > 0 and Age < 100),
 	constraint UQ_Customer_Email unique(Email),
 	constraint UQ_Customer_Phone unique(Phone)
