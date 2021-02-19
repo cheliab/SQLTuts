@@ -44,4 +44,25 @@ values
 select * from Products
 
 ----------------------------------------
--- Добавление нескольких строк
+-- Добавление строки с значением по умолчанию
+
+insert Products 
+(ProductName, Manufacturer, ProductCount, Price)
+values
+('Mi6', 'Xiaomi', default, 28000)
+
+select * from Products
+
+--------------------------------------------
+-- Добавление строки со всеми значениями default
+
+create table TestDefault
+(
+	[Name] nvarchar(20) default 'Иван',
+	Age int default 18
+)
+
+insert TestDefault
+default values
+
+select * from TestDefault
