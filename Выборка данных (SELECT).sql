@@ -45,10 +45,26 @@ Price * ProductCount -- умножение
 from Products
 
 -------------------------------------------------
--- выполнение операций при выборке
+-- указание псевдонима  при выборке (AS)
 
 select
 ProductName + ' (' + Manufacturer + ')' as ModelName,
 Price,
 Price * ProductCount as TotalSum
 from Products
+
+--------------------------------------------------
+-- выборка уникальных строк
+
+select distinct Manufacturer from Products
+
+--------------------------------------------------
+-- выборка с добавлением в таблицу
+
+select 
+ProductName + ' (' + Manufacturer + ')' as ModelName,
+Price
+into ProductSummary
+from Products
+
+select * from ProductSummary
