@@ -59,12 +59,25 @@ from Products
 select distinct Manufacturer from Products
 
 --------------------------------------------------
--- выборка с добавлением в таблицу
+-- выборка с добавлением в таблицу (таблица должна не существовать, создается новая)
 
 select 
 ProductName + ' (' + Manufacturer + ')' as ModelName,
 Price
 into ProductSummary
+from Products
+
+select * from ProductSummary
+
+--------------------------------------------------
+-- выборка с добавлением в таблицу (таблица уже должна существовать, данные добавляются)
+
+truncate table ProductSummary
+
+insert into ProductSummary
+select 
+ProductName + ' (' + Manufacturer + ')' AS ModelName
+,Price
 from Products
 
 select * from ProductSummary
