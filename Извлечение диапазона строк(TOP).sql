@@ -37,3 +37,17 @@ from Products
 select top 50 percent ProductName
 from Products
 
+--------------------------------------------
+-- Оператор OFFSET
+
+select * from Products
+order by Id
+offset 2 rows -- выведет все записи с Id 3
+
+--------------------------------------------
+-- Оператор FETCH
+
+select * from Products
+order by Id
+offset 2 rows -- веведет записи с Id 3
+fetch next 3 rows only; -- только 3 записи
