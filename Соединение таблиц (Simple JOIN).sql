@@ -73,3 +73,55 @@ values
     (SELECT Price FROM Products WHERE ProductName='iPhone 6S')
 )
 
+--------------------------------------------------------------
+-- простое соединение (декартово произведение, перемножение строк)
+
+select * from Orders, Customers
+
+--------------------------------------------------------------
+-- условие при соединении
+
+select * from Orders, Customers
+where Orders.CustomerId = Customers.Id
+
+--------------------------------------------------------------
+-- соединение трех таблиц
+
+select 
+	Customers.FirstName, 
+	Products.ProductName, 
+	Orders.CreatedAt 
+from Orders, Customers, Products
+where 
+	Orders.CustomerId = Customers.Id 
+	and Orders.ProductId = Products.Id
+
+--------------------------------------------------------------
+-- использование псевдонимов
+
+select 
+	C.FirstName,
+	P.ProductName,
+	O.CreatedAt
+from 
+	Orders as O, 
+	Customers as C, 
+	Products as P
+where
+	O.CustomerId = C.Id
+	and O.ProductId = P.Id
+
+--------------------------------------------------------------
+-- получить все столбцы определенной таблицы
+
+select
+	C.FirstName,
+	P.ProductName,
+	O.*
+from 
+	Orders as O,
+	Customers as C,
+	Products as P
+where
+	O.CustomerId = C.Id
+	and O.ProductId = P.Id
