@@ -1,7 +1,7 @@
-create database tut_SimpleJoin
+create database tut_CrossJoin
 go
 
-use tut_SimpleJoin
+use tut_CrossJoin
 go
 
 create table Products
@@ -47,8 +47,6 @@ insert into Customers
 values
 ('Tom'), ('Bob'), ('Sam')
 
----------------------------------------------------------
-
 insert into Orders
 values
 ( 
@@ -74,7 +72,13 @@ values
 )
 
 --------------------------------------------------------------
--- простое соединение (декартово произведение, перемножение строк)
+-- Явное соединение (декартово произведение, перемножение строк)
+
+select * from Orders
+cross join Customers
+
+--------------------------------------------------------------
+-- Неявное соединение
 
 select * from Orders, Customers
 
