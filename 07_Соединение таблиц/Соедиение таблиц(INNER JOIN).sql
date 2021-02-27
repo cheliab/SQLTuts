@@ -4,6 +4,8 @@ go
 use tut_InnerJoin
 go
 
+------------------------------------------------------------
+
 create table Products
 (
 	Id int identity primary key,
@@ -31,8 +33,6 @@ create table Orders
 
 ------------------------------------------------------------
 
-------------------------------------------------------------
-
 insert into Products
 values
 ('iPhone 6', 'Apple', 2, 36000),
@@ -47,10 +47,9 @@ insert into Customers
 values
 ('Tom'), ('Bob'), ('Sam')
 
-------------------------------------------------------------
-
-insert into Orders
+insert into Orders -- 3 заказа
 values
+-- 1
 ( 
     (SELECT Id FROM Products WHERE ProductName='Galaxy S8'), 
     (SELECT Id FROM Customers WHERE FirstName='Tom'),
@@ -58,6 +57,7 @@ values
     2, 
     (SELECT Price FROM Products WHERE ProductName='Galaxy S8')
 ),
+-- 2
 ( 
     (SELECT Id FROM Products WHERE ProductName='iPhone 6S'), 
     (SELECT Id FROM Customers WHERE FirstName='Tom'),
@@ -65,6 +65,7 @@ values
     1, 
     (SELECT Price FROM Products WHERE ProductName='iPhone 6S')
 ),
+-- 3
 ( 
     (SELECT Id FROM Products WHERE ProductName='iPhone 6S'), 
     (SELECT Id FROM Customers WHERE FirstName='Bob'),
@@ -72,3 +73,66 @@ values
     1, 
     (SELECT Price FROM Products WHERE ProductName='iPhone 6S')
 )
+
+------------------------------------------------------------
+-- Добавить к заказам информацию по товарам
+
+select
+	Orders.CreatedAt,
+	Orders.ProductCount,
+	Products.ProductName
+from Orders
+	join Products on Products.Id = Orders.ProductId
+
+------------------------------------------------------------
+-- использование псевдонимов
+
+select
+	O.CreatedAt,
+	O.ProductCount,
+	P.ProductName
+from Orders as O
+	join Products as P
+	on P.Id = O.ProductId
+
+------------------------------------------------------------
+-- соединение нескольких таблиц
+
+select
+	Orders.CreatedAt,
+	Orders.ProductCount,
+	Products.ProductName,
+	Customers.FirstName
+from Orders 
+	join Products on Products.Id = Orders.ProductId
+	join Customers on Customers.Id = Orders.ProductId
+
+------------------------------------------------------------
+-- использование присоединенных таблиц в условиях и сортировке
+
+select
+	Orders.CreatedAt,
+	Orders.ProductCount,
+	Products.ProductName,
+	Customers.FirstName
+from Orders
+	join Products on Products.Id = Orders.ProductId
+	join Customers on Customers.Id = Orders.CustomerId
+where
+	Products.Price < 45000
+order by
+	Customers.FirstName
+
+------------------------------------------------------------
+-- сложные соединения
+
+select 
+	Orders.CreatedAt,
+	Customers.FirstName,
+	Products.ProductName
+from Orders
+	join Products
+		on Products.Id = Orders.ProductId
+		and Products.Manufacturer = 'Apple'
+	join Customers 
+		on Customers.Id = Orders.CustomerId
