@@ -140,3 +140,22 @@ from Products
 group by
 	Products.ProductName,
 	Products.Manufacturer
+
+------------------------------------------------------------
+-- индекс для уменьшения количества считываний при поиске во второй таблице
+
+create nonclustered index Orders_ProductId
+on Orders(ProductId)
+include(ProductCount, Price)
+
+select
+	Products.ProductName,
+	Products.Manufacturer,
+	ISNULL(SUM(Orders.ProductCount * Orders.Price), 0) as OrdersSum
+from Products
+	left join Orders 
+	WITH (INDEX(Orders_ProductId)) -- явное указание используемого индекса (т.к. иногда может не использовать)
+	on Orders.ProductId = Products.Id
+group by
+	Products.ProductName,
+	Products.Manufacturer
