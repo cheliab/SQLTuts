@@ -77,6 +77,15 @@ select Id, 'Обновлен товар: ' + ProductName + ' Фирма: ' + Man
 from inserted
 go
 
---insert
+-- Новая запись
+insert into Products
+(ProductName, Manufacturer, ProductCount, Price)
+values
+('C350', 'Motorola', 10, 2100)
 
---update 
+-- Обновление
+update Products
+set Manufacturer = 'Moto'
+where Manufacturer = 'Motorola'
+
+select * from History
