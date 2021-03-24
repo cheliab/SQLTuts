@@ -162,3 +162,78 @@ commit -- нужно сохранить все транзакции, так ка
 commit 
 
 select * from Courts where id = 1
+
+--------------------------------------------------
+-- 5. Пример использования транзакции в процедуре с try catch
+
+-- создаем таблицы для примера
+create table Players (
+	[Id] int primary key identity,
+	[FirstName] nvarchar(50) not null,
+	[LastName] nvarchar(100) not null,
+	[Rank] int default 0
+)
+go
+
+create table PlayerInfos (
+	[Id] int primary key identity, 
+	[PlayerId] int not null, 
+	[BirthDate] date, 
+	[Weight] smallint, 
+	[Height] smallint, 
+	[Country] nvarchar(50), 
+	[BirthPlace] nvarchar(50), 
+	[Residence] nvarchar(50)
+)
+go
+
+alter table PlayerInfos
+add constraint UQ_PlayerInfo_BirthDate unique (BirthDate)
+go
+
+create procedure spAddPlayer
+	@FirstName nvarchar(50),
+	@LastName nvarchar(100),
+	@Rank int = null,
+	@BirthDate date = null,
+	@Weight smallint = null,
+	@height smallint = null,
+	@country nvarchar(50) = null,
+	@BirthPlace nvarchar(50) = null,
+	@Residence nvarchar(50) = null
+as
+begin
+
+
+	set nocount on;
+
+	declare @PlayerId int;
+
+begin try
+	begin tran
+		
+		insert Players values
+		(@FirstName, @LastName, @Rank)
+
+		set @PlayerId = @@identity
+
+		insert PlayerInfos values
+		(@PlayerId, @BirthDate, @Weight, @Height, @Country, @BirthPlace, @Residence)
+	commit
+end try
+begin catch
+
+	select
+		ERROR_NUMBER() as ErrorNumber,
+		ERROR_SEVERITY() as ErrorSeverity,
+		ERROR_STATE() as ErrorState,
+		ERROR_PROCEDURE() as ErrorProcedure,
+		ERROR_LINE() as ErrorLine,
+		ERROR_MESSAGE() as ErrorMessage
+		
+	rollback
+
+end catch
+
+end;
+go
