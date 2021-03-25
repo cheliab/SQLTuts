@@ -30,8 +30,6 @@ update TestTable
 set [Value] = [Value] + 10
 where Id = 1;
 
-
-
 select [Value]
 from TestTable
 where Id = 1;
