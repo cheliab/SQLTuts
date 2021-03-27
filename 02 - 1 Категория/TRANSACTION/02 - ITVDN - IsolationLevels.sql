@@ -50,6 +50,7 @@ where Id = 1
 waitfor delay '00:00:10';
 
 -- Откатываем изменения после задержки, чтобы во второй транзакции получить грязное чтение
+-- Вторая транзакция считает данные, которые в итоге будут отменены
 rollback;
 
 select [Value]
@@ -67,9 +68,63 @@ where Id = 1;
 
 waitfor delay '00:00:10';
 
+-- Если выполнить вторую транзакцию с update, то в этом select будут уже новые данные
 select [Value]
 from TestTable
 where Id = 1;
+
+commit tran;
+
+--
+-- повышаем уровень изоляции транзакции
+--
+
+begin tran 
+
+-- Повышение уровня изоляции позволяет исключить не повторяемое чтение
+-- Вторая транзакция не сможет выполнить update пока не завершится эта транзакция
+set transaction isolation level repeatable read;
+
+select [Value]
+from TestTable
+where Id = 1;
+
+waitfor delay '00:00:10'
+
+-- Теперь данный селект получит те же данные что и первый
+select [Value]
+from TestTable
+where Id = 1;
+
+commit tran;
+
+------------------------------------------------------
+-- 4. PHANTOM READS / ФАНТОМНОЕ ЧТЕНИЕ
+
+begin tran 
+
+select * from TestTable
+
+waitfor delay '00:00:10'
+
+select * from TestTable
+
+commit tran;
+
+-- 
+-- повышаем уровень изоляции транзакции
+-- 
+
+begin tran 
+
+-- При таком уровне изоляции вторая транзакция не сможет вставить в таблицу новую запись
+set transaction isolation level serializable;
+
+select * from TestTable
+
+waitfor delay '00:00:10'
+
+select * from TestTable
 
 commit tran;
 

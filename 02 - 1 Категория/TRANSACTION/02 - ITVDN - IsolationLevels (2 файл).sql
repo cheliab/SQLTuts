@@ -40,10 +40,27 @@ where Id = 1;
 
 commit tran;
 
+--
+-- понижаем уровень изоляции
+--
+
+begin tran 
+
 -- Можно понизить уровень блокировки до минимального (по умолчанию read committed)
--- Но это транзакции так же ждут свой очереди
+-- Но параллельные транзакции все равно будут ждать своей очереди
+-- Проблема lost update решена в ms sql впринципе
 
 set transaction isolation level read uncommitted;
+
+update TestTable
+set [Value] = [Value] + 10
+where Id = 1;
+
+select [Value]
+from TestTable
+where Id = 1;
+
+commit tran;
 
 ----------------------------------------------------------------
 -- 2. DIRTY READ / ГРЯЗНОЕ ЧТЕНИЕ
@@ -59,12 +76,22 @@ where Id = 1
 
 commit tran
 
+--
 -- понижаем уровень изоляции
+--
 
+begin tran 
+
+-- При таком уровне изоляции считывает данные без ожидания
+-- но они являются не верными так как данные в первой транзакции по итогу откатились
+-- чтобы исключить грязное чтение уровень изоляции должен быть read commited и выше
 set transaction isolation level read uncommitted
 
--- снова считывает данные без ожидания
--- но они являются не верными так как данные в первой транзакции по итогу откатились
+select [Value]
+from TestTable
+where Id = 1
+
+commit tran
 
 ----------------------------------------------------------------
 -- 3. NON-REPEATABLE READS / НЕ ПОВТОРЯЕМОЕ ЧТЕНИЕ
@@ -74,5 +101,14 @@ begin tran
 update TestTable
 set [Value] = 100
 where Id = 1
+
+commit tran
+
+------------------------------------------------------------------
+-- 4. PHANTOM READS / ФАНТОМНОЕ ЧТЕНИЕ
+
+begin tran
+
+insert into TestTable ([Value]) values (20)
 
 commit tran
