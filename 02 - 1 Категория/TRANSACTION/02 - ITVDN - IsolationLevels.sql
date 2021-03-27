@@ -30,7 +30,7 @@ update TestTable
 set [Value] = [Value] + 3
 where Id = 1;
 
-waitfor delay '00:00:10'; -- Задержка чтобы успеть выполнить вторую транзакцию
+waitfor delay '00:00:10'; -- Задержка чтобы успеть выполнить вторую транзакцию (2 файл)
 
 select [Value]
 from TestTable
@@ -38,13 +38,34 @@ where Id = 1;
 
 commit tran;
 
--- вторая транзакция, чтобы показать как работают уровни изоляции
+-------------------------------------------
+-- 2. DIRTY READ / ГРЯЗНОЕ ЧТЕНИЕ
 
-begin tran -- set transaction isolation level read uncomitted;
+begin tran
 
 update TestTable
-set [Value] = [Value] + 10
+set [Value] = [Value] + 3
+where Id = 1
+
+waitfor delay '00:00:10';
+
+-- Откатываем изменения после задержки, чтобы во второй транзакции получить грязное чтение
+rollback;
+
+select [Value]
+from TestTable
+where Id = 1
+
+--------------------------------------------------
+-- 3. NON-REPEATABLE READS / НЕ ПОВТОРЯЕМОЕ ЧТЕНИЕ
+
+begin tran
+
+select [Value]
+from TestTable
 where Id = 1;
+
+waitfor delay '00:00:10';
 
 select [Value]
 from TestTable
