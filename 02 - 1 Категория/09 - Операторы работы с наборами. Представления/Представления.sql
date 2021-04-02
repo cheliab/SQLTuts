@@ -77,6 +77,7 @@ go
 select * from OrdersProductsCustomers
 go
 
+-----------------------------------------------------------------------
 -- Второй вариант создания (определение списка колонок после названия)
 
 create view OrdersProductsCustomersV2 (OrderDate, Customer, Product) as
@@ -87,3 +88,25 @@ select
 from Orders
 	inner join Products on Orders.ProductId = Products.Id
 	inner join Customers on Orders.CustomerId = Customers.Id
+go
+
+------------------------------------------------------------------
+-- Изменение представлений
+
+alter view OrdersProductsCustomers
+as
+select
+	Orders.CreateAt OrderDate,
+	Customers.FirstName Customer,
+	Products.ProductName Product,
+	Products.Manufacturer Manufacturer
+from Orders
+	inner join Products on Orders.ProductId = Products.Id
+	inner join Customers on Orders.CustomerId = Customers.Id
+
+select * from OrdersProductsCustomers
+
+------------------------------------------------------------------
+-- Удаление представлений
+
+drop view OrdersProductsCustomers
