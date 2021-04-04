@@ -1,4 +1,4 @@
-create database metanit_UpdatableView
+п»їcreate database metanit_UpdatableView
 go
 
 use metanit_UpdatableView
@@ -16,7 +16,7 @@ create table Products (
 go
 
 ---------------------------------------------------------
--- создаем представление
+-- СЃРѕР·РґР°РµРј РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ
 
 create view ProductView as
 select 
@@ -27,19 +27,19 @@ from Products
 go
 
 ------------------------------------------------------------
--- вставляем данные
+-- РІСЃС‚Р°РІР»СЏРµРј РґР°РЅРЅС‹Рµ
 
 insert into ProductView (Product, Manufacturer, Price)
 values ('Nokia 8', 'HDC Global', 1000)
 go
 
 ------------------------------------------------------------
--- проверяем
+-- РїСЂРѕРІРµСЂСЏРµРј
 
 select * from ProductView
 
 ------------------------------------------------------------
--- обновление
+-- РѕР±РЅРѕРІР»РµРЅРёРµ
 
 update ProductView
 set Price = 1200
