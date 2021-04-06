@@ -62,3 +62,23 @@ print @name
 select @name = FirstName from Person -- Если не указываем условие, то будет присвоено значение из последней строки
 
 print @name
+
+select @name = FirstName from Person where Id = 100 -- Если указать не существующий Id, то в переменную попадет значение из последней строки
+
+print @name
+go
+
+-- (SELECT ... FROM) / Присвоение переменной результата подзапроса
+
+declare @name nvarchar(30);
+
+select @name = (select FirstName from Person where Id = 2) -- тут результат будет аналогичный
+
+print @name
+
+select @name = (select FirstName from Person) -- в данном варианте возникнет ошибка (нельзя присвоить если в результате получается несколько значений)
+
+select @name = (select FirstName from Person where Id = 100) -- в данном варианте в переменной получается NULL
+
+print isnull(@name, 'NULL')
+go
