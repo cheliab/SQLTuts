@@ -61,10 +61,14 @@ go
 
 create table Person (id int);
 
+-- Проверка наличия таблицы в БД
+
 if exists(select 1 from sys.tables where object_id = OBJECT_ID('Person'))
 begin 
 	print 'Table "Person" already exists';
 end
+
+-- Еще один вариант проверки
 
 if OBJECT_ID('Person') is not null
 	print 'Table "Person" already exists';
