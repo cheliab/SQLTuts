@@ -24,3 +24,21 @@ begin catch
 end catch;
 go
 
+-- RAISERROR - Позволяет пробросить ошибку, указать сообщение, указать ее уровень серьезности и тд.
+
+begin try
+	select 1/0
+end try
+begin catch
+	raiserror('Деление на ноль', 11, 2); -- raiserror(message, severity, state) / severity - уровень серьезности ошибки / state - место ошибки (если они есть в нескольких местах)
+end catch
+go
+
+-- доп. аргументы
+
+begin try
+	select 1/0;
+end try
+begin catch
+	raiserror('Ошибка %s %d', 11, 2, 'номер', 10); -- в конце можно указывать дополнительные аргуметны, которые можно подставить в основное сообщение
+end catch
