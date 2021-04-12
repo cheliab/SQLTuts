@@ -1,6 +1,8 @@
 ﻿-- Correlated Subqueries vs Derived Tables
 -- https://www.youtube.com/watch?v=Kx4U5BhRGqM
 
+use [StackOverflow2010]
+
 -----------------------------------------------------------
 
 create database BertWagner_CorrelatedSubqueriesVSDerivedTables
@@ -16,7 +18,7 @@ create table Badges (
 )
 
 create nonclustered index IX_Badges_UserID_Date
-on Badges (UserId ASC)
+on Badges (UserId ASC) INCLUDE ([Date])
 
 drop table Badges
 
@@ -79,3 +81,12 @@ from
 			group by UserId
 		) i
 		on o.UserId = i.UserId
+
+
+
+select
+	UserId,
+	min([Date]) as FirstBadgeDate
+from Badges
+group by
+	UserId
