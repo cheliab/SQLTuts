@@ -14,3 +14,7 @@ WHEN NOT MATCHED THEN
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE
 ```
+
+* `WHEN MATCHED` - действия для строк, где есть совпадение по условию 
+* `WHEN NOT MATHED` - действие для строк, которых не хватает в основной таблице 
+* `WHEN NOT MATHED BY SOURCE` - действие для строк, которые лишние в основной таблице
