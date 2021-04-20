@@ -1,4 +1,6 @@
-﻿create database tut_Merge_SimpleExample
+﻿-- https://www.youtube.com/watch?v=5dk33HN8BX8
+
+create database tut_Merge_SimpleExample
 go
 
 use tut_Merge_SimpleExample
