@@ -1,4 +1,7 @@
-﻿create database tut_Merge
+﻿-- https://info-comp.ru/obucheniest/561-merge-in-t-sql.html
+-- Пример использования MERGE
+
+create database tut_Merge
 go
 
 use tut_Merge
@@ -64,7 +67,7 @@ WHEN MATCHED THEN -- если есть совпадение по условию 
 	UPDATE SET 
 		TargetTable.ProductName = SourceTable.ProductName,
 		TargetTable.Price = SourceTable.Price
-WHEN NOT MATCHED THEN -- если не совпадения (т.е. в целевой не хватает записи) добавляем запись (INSERT - выполняем команду для вставки)
+WHEN NOT MATCHED THEN -- если нет совпадения (т.е. в целевой не хватает записи) добавляем запись (INSERT - выполняем команду для вставки)
 	INSERT (Id, ProductName, Price)
 	VALUES (SourceTable.Id, SourceTable.ProductName, SourceTable.Price)
 output -- вывод результата работы операции
@@ -82,7 +85,7 @@ select * from SourceTable;
 ----------------------------------
 -- Пример 2 - синхронизация таблиц с помощью MERGE
 
--- очищаем табилцы
+-- Очищаем таблицы
 truncate table TargetTable
 truncate table SourceTable
 
@@ -140,7 +143,7 @@ go
 merge TargetTable T
 using SourceTable S
 on (T.Id = S.Id)
-when matched and S.Price is not null then -- дополнительное условие
+when matched and S.Price is not null then -- дополнительное условие (доп. проверка что цена заполнена)
 	update set T.ProductName = S.ProductName, T.Price = S.Price
 when not matched then
 	insert (Id, ProductName, Price)
